@@ -12,6 +12,98 @@ function B() {
 }
 A(B);
 
+
+// 1. 비동기 처리코드 (제이쿼리의 ajax 통신 API)
+function getData() {
+	var tableData;
+	$.get('https://domain.com/products/1', function(response) {
+		tableData = response;
+	});
+	return tableData;
+}
+
+console.log(getData()); // undefined
+
+// 2. 콜백함수로 비동기처리 문제 해결
+function getData(callbackFunc) {
+	$.get('https://domain.com/products/1', function(response) {
+		callbackFunc(response); // 서버에서 받은 데이터 response를 callbackFunc() 함수에 넘겨줌
+	});
+}
+
+getData(function(tableData) {
+	console.log(tableData); // $.get()의 response 값이 tableData에 전달됨
+});
+
+// 3. Promise 적용
+function getData(callback) {
+  // new Promise() 추가
+  return new Promise(function(resolve, reject) {
+    $.get('url 주소/products/1', function(response) {
+      // 데이터를 받으면 resolve() 호출
+      resolve(response);
+    });
+  });
+}
+
+// getData()의 실행이 끝나면 호출되는 then()
+getData().then(function(tableData) {
+  // resolve()의 결과 값이 여기로 전달됨
+  console.log(tableData); // $.get()의 reponse 값이 tableData에 전달됨
+});
+
+
+// 4. Promise에 resolve, reject 출력
+function getData() {
+  return new Promise(function(resolve, reject) {
+    $.get('url 주소/products/1', function(response) {
+      if (response) {
+        resolve(response);
+      }
+      reject(new Error("Request is failed"));
+    });
+  });
+}
+
+// 위 $.get() 호출 결과에 따라 'response' 또는 'Error' 출력
+getData().then(function(data) {
+  console.log(data); // response 값 출력
+}).catch(function(err) {
+  console.error(err); // Error 출력
+});
+
+// 5. async await http 통신
+function fetchUser() {
+  var url = 'https://jsonplaceholder.typicode.com/users/1'
+  return fetch(url).then(function(response) {
+    return response.json();
+  });
+}
+
+function fetchTodo() {
+  var url = 'https://jsonplaceholder.typicode.com/todos/1';
+  return fetch(url).then(function(response) {
+    return response.json();
+  });
+}
+
+// 6. 에러 잡기
+async function logTodoTitle() {
+  try {
+    var user = await fetchUser();
+    if (user.id === 1) {
+      var todo = await fetchTodo();
+      console.log(todo.title); // delectus aut autem
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+
+
+
 /* -------------------------------------------------------------------------- */
 /*                                    콜백지옥                                    */
 /* -------------------------------------------------------------------------- */
