@@ -1,7 +1,7 @@
-// function delay(ms){
-//   return new Promise(resolve=>setTimeout(resolve,ms))
-// }
-// delay(3000).then(()=>console.log('3초후실행'))
+function delay(ms){
+  return new Promise(resolve=>setTimeout(resolve,ms))
+}
+delay(3000).then(()=>console.log('3초후실행'))
 
 //await 을 어디에 붙여야할까?
 async function f() {
@@ -29,7 +29,7 @@ f();
 // }
 
 // loadJson('no-such-user.json')
-//   .catch(alert); // Error: 404
+//   .catch(console.log); // Error: 404
 
 async function loadJson(url) {
   let response = await fetch(url);
@@ -42,3 +42,13 @@ async function loadJson(url) {
 }
 
 loadJson("no-such-user.json").catch(console.log); // Error: 404
+
+
+// resolve나 reject 하나만 반영해
+let promise = new Promise(function(resolve, reject) {
+  resolve("완료");
+  reject(new Error("에러임")); 
+  setTimeout(() => resolve("시간지남")); 
+});
+
+console.log(promise);
