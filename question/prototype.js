@@ -9,9 +9,9 @@ function Cat(_name, _age) {
   this.name = _name;
   this.age = _age;
 
-  this.bark = function (){
-    return '냐옹'
-  }
+  // this.bark = function (){
+  //   return '냐옹'
+  // }
 }
 
 Cat.prototype.bark = function () {
